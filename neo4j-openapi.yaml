@@ -3,7 +3,7 @@ info:
   title: Neo4j Cypher Query API
   version: 1.0.0
 servers:
-  - url: https://752afd5d.databases.neo4j.io
+  - url: https://752afd5d.databases.neo4j.io/
 paths:
   /db/neo4j/query/v2:
     post:
