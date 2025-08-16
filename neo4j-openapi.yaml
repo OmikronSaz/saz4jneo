@@ -1,17 +1,14 @@
 openapi: 3.1.0
 info:
-  title: Neo4j Aura Query API (read-only)
+  title: Neo4j Cypher Query API
   version: 1.0.0
 servers:
   - url: https://752afd5d.databases.neo4j.io
 paths:
   /db/neo4j/query/v2:
     post:
+      summary: Run Cypher read-only query
       operationId: runCypher
-      summary: Run a Cypher read query against the Aura database
-      description: |
-        Executes a Cypher statement. Use for **read-only** queries (MATCH / RETURN, etc.).
-        Do not use for CREATE/SET/DELETE/WRITE operations.
       security:
         - basicAuth: []
       requestBody:
@@ -19,22 +16,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                statement:
-                  type: string
-                  description: Cypher query to execute
-                  examples:
-                    - MATCH (e:Element) RETURN e.Label LIMIT 5
-                parameters:
-                  type: object
-                  description: Named parameters (if any)
-                  additionalProperties: true
-              required:
-                - statement
+              $ref: "#/components/schemas/CypherQuery"
       responses:
         "200":
-          description: Success
+          description: Query result
           content:
             application/json:
               schema:
@@ -42,10 +27,19 @@ paths:
                 properties:
                   results:
                     type: array
-                  bookmarks:
-                    type: array
 components:
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
+  schemas:
+    CypherQuery:
+      type: object
+      properties:
+        statement:
+          type: string
+        parameters:
+          type: object
+          additionalProperties: true
+      required:
+        - statement
